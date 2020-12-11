@@ -357,85 +357,6 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
         new AbstractMap.SimpleEntry<String, Boolean>("disable_categories_filter",categories_ids == null),
         new AbstractMap.SimpleEntry<String, Boolean>("disable_languages_filter", languages_ids == null));
 
-//    List<Integer> result = template.query(
-//                "SELECT COUNT(cnt_tbl.id) id " +
-//                    "FROM ( SELECT DISTINCT v.id id "+
-//                            "FROM vacancies v " +
-//                                "LEFT JOIN companies_list c ON v.company_id = c.id " +
-//                                "LEFT JOIN rates_list r     ON v.rate_id = r.id " +
-//                                "LEFT JOIN locations_list l ON v.location_id = l.id " +
-//                                "LEFT JOIN vacancies_types          v_t ON v.id = v_t.vacancy_id " +
-//                                "LEFT JOIN vacancies_professions    v_p ON v.id = v_p.vacancy_id " +
-//                                "LEFT JOIN vacancies_employments    v_e ON v.id = v_e.vacancy_id " +
-//                                "LEFT JOIN vacancies_categories     v_c ON v.id = v_c.vacancy_id " +
-//                                "LEFT JOIN vacancies_languages      v_l ON v.id = v_l.vacancy_id " +
-//                            "WHERE " +
-//                                "( " + namesConditionExpression + " OR :disable_names_filter) " +
-//                                " AND ( :date <= v.date) AND ( :salary <= v.salaryMin OR :salary <= v.salaryMax )" +
-//                                " AND (c.id IN (:companies_ids) OR :disable_companies_filter) " +
-//                                " AND (l.id IN (:locations_ids) OR :disable_locations_filter ) " +
-//                                " AND (r.id IN (:rates_ids )    OR :disable_rates_filter) " +
-//                                " AND (v_t.type_id       IN (:types_ids)        OR :disable_types_filter ) " +
-//                                " AND (v_p.profession_id IN (:professions_ids)  OR :disable_professions_filter ) " +
-//                                " AND (v_e.employment_id IN (:employments_ids)  OR :disable_employments_filter ) " +
-//                                " AND (v_c.category_id   IN (:categories_ids)   OR :disable_categories_filter ) " +
-//                                " AND ((v_l.language_id  IN (:languages_ids) AND " +
-//                                       "v_l.level <= :language_level)           OR :disable_languages_filter ) " +
-//                          ") cnt_tbl"
-//                    , new MapSqlParameterSource(paramsMap), rowMapperIds);
-//
-//    if (result.get(0) > (page-1)*rows) {
-//        String sortFiled = "";
-//        String AscDesc = sort > 0 ? "DESC" : "ASC";
-//        switch (Math.abs(sort)){
-//            case 2:
-//                sortFiled = " salaryAvg " + AscDesc + ", ";
-//                break;
-//            case 1:
-//                sortFiled = " date  " + AscDesc + ", ";
-//                break;
-//            default:
-//                sortFiled = " ";
-//        }
-//
-//        List<Integer> ids = template.query(
-//                "SELECT DISTINCT v.id id, v.date date, " +
-//                        "CASE " +
-//                        "   WHEN v.salaryMax > 0 AND v.salaryMin > 0 THEN (v.salaryMax + v.salaryMin)/2 " +
-//                        "   WHEN v.salaryMax > 0 AND v.salaryMin = 0 THEN v.salaryMax " +
-//                        "   WHEN v.salaryMin > 0 AND v.salaryMax = 0 THEN v.salaryMin" +
-//                        "   ELSE 0 " +
-//                        "END salaryAvg " +
-//                        "FROM vacancies v " +
-//                            "LEFT JOIN companies_list c ON v.company_id = c.id " +
-//                            "LEFT JOIN rates_list r     ON v.rate_id = r.id " +
-//                            "LEFT JOIN locations_list l ON v.location_id = l.id " +
-//                            "LEFT JOIN vacancies_types          v_t ON v.id = v_t.vacancy_id " +
-//                            "LEFT JOIN vacancies_professions    v_p ON v.id = v_p.vacancy_id " +
-//                            "LEFT JOIN vacancies_employments    v_e ON v.id = v_e.vacancy_id " +
-//                            "LEFT JOIN vacancies_categories     v_c ON v.id = v_c.vacancy_id " +
-//                            "LEFT JOIN vacancies_languages      v_l ON v.id = v_l.vacancy_id " +
-//                        "WHERE " +
-//                        "( " + namesConditionExpression + " OR :disable_names_filter) " +
-//                            " AND ( :date <= v.date) AND ( :salary <= v.salaryMin OR :salary <= v.salaryMax )" +
-//                            " AND (c.id IN (:companies_ids) OR :disable_companies_filter) " +
-//                            " AND (l.id IN (:locations_ids) OR :disable_locations_filter ) " +
-//                            " AND (r.id IN (:rates_ids )    OR :disable_rates_filter) " +
-//                            " AND (v_t.type_id       IN (:types_ids)        OR :disable_types_filter ) " +
-//                            " AND (v_p.profession_id IN (:professions_ids)  OR :disable_professions_filter ) " +
-//                            " AND (v_e.employment_id IN (:employments_ids)  OR :disable_employments_filter ) " +
-//                            " AND (v_c.category_id   IN (:categories_ids)   OR :disable_categories_filter ) " +
-//                            " AND ((v_l.language_id  IN (:languages_ids) AND " +
-//                                   "v_l.level <= :language_level)           OR :disable_languages_filter ) " +
-//                        " ORDER BY " + sortFiled + " id " +
-//                            " LIMIT :rows_limit OFFSET :rows_offset"
-//                , new MapSqlParameterSource(paramsMap), rowMapperIds);
-//
-//
-//
-//        result.addAll(ids);
-//    }
-
     String sort_Filed = "";
     String AscDesc = sort > 0 ? "DESC" : "ASC";
     switch (Math.abs(sort)) {
@@ -500,15 +421,6 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
                     "SELECT DISTINCT * FROM rec_tbl WHERE NOT is_group",
                 new MapSqlParameterSource(Map.of("locations", parentLocations)), rowMapperLocation);
         return locations.stream().map(Location::getId).collect(Collectors.toList());
-
-//        List<Integer> locations_ids =  null;
-//        if (locations != null){
-//            locations_ids = new ArrayList<>();
-//            for (Location location : locations) {
-//                locations_ids.add(location.getId());
-//            }
-//        }
-//        return locations_ids;
     }
 //=========================================================================================================> Professions
     public List<Profession> getProfessionsByIds(int[] professions_id){
@@ -531,15 +443,6 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
                         "SELECT DISTINCT * FROM rec_tbl WHERE NOT is_group",
                 new MapSqlParameterSource(Map.of("professions", parentProfessions)), rowMapperProfession);
         return professions.stream().map(Profession::getId).collect(Collectors.toList());
-
-//        List<Integer> professions_ids =  null;
-//        if (professions != null){
-//            professions_ids =  new ArrayList<>();
-//            for (Profession profession : professions) {
-//                professions_ids.add(profession.getId());
-//            }
-//        }
-//        return professions_ids;
     }
 //===============================================================================================================> Types
     public List<Type> getTypesByIds(List<Integer> ids){
@@ -618,21 +521,3 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
         return result;
     }
 }
-//===============================================================================================================> Rates
-//    public Rate getRateById(int rate_id){
-//        if (rate_id <= 0){
-//            return null;
-//        }
-//        return  template.queryForObject("SELECT id, name FROM rates_list WHERE id = :id",
-//                                            Map.of("id", rate_id), rowMapperRate);
-//    }
-
-//===========================================================================================================> Locations
-//    public Location getLocationById(int location_id){
-//        if (location_id <= 0){
-//            return null;
-//        }
-//        return  template.queryForObject("SELECT id, name FROM locations_list WHERE id = :id",
-//                                            Map.of("id", location_id), rowMapperLocation);
-//    }
-//----------------------------------------------------------------------------------------------------------------------

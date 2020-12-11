@@ -23,21 +23,12 @@ public class LanguagesResultSetExtractor implements ResultSetExtractor<Map<Integ
                                             resultSet.getString("language_name"),
                                             new LanguageLevel(resultSet.getInt("level_id"),
                                                     resultSet.getString("level_name")));
-
             List<Language> languages = mapResult.get(v_id);
             if (languages == null){
                 languages = new ArrayList<>();
                 mapResult.put(v_id, languages);
             }
             languages.add(language);
-
-//            Employment employment = new Employment(resultSet.getInt("id"), resultSet.getString("name"));
-//            List<Employment> employments = mapResult.get(v_id);
-//            if (employments == null){
-//                employments = new ArrayList<>();
-//                mapResult.put(v_id, employments);
-//            }
-//            employments.add(employment);
         }
         return mapResult;
     }
