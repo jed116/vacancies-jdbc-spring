@@ -1,31 +1,35 @@
 ################################################################################################################## G E T
-GET http://localhost:8080/vacancies
+GET https://vacancies-jdbc-spring.herokuapp.com/vacancies/
 ###
-GET http://localhost:8080/vacancies/20
+GET https://vacancies-jdbc-spring.herokuapp.com/vacancies/21
 ###
-GET http://localhost:8080/vacancies/ids?id=3&id=1&id=21
+GET https://vacancies-jdbc-spring.herokuapp.com/vacancies/ids?id=2&id=1&id=22&id=21
 ################################################################################################################### FIND
-http://localhost:8080/vacancies/find?names=1с&names=  jaVa   &names="  ПРЕПОДАВАТАЕЛЬ"&names=          ПРЕП
+https://vacancies-jdbc-spring.herokuapp.com/vacancies/find?sal=100000&sort=2
 ###
-http://localhost:8080/vacancies/find?names=рарус&rows=150
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?date=2020-12-01
 ###
-http://localhost:8080/vacancies/find?locs=1&profs=2001&rows=3&sort=2&page=3
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?names=MANGO OFFICE&names=Автошкола СВЕТОФОР
 ###
-http://localhost:8080/vacancies/find?ctgrs=4&ctgrs=2&ctgrs=3&sort=2
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?comps=6&comps=4
 ###
-http://localhost:8080/vacancies/find?rates=3&rates=1
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?locs=1001&rows=10&sort=2
 ###
-http://localhost:8080/vacancies/find?sal=50001&locs=1001
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?rates=3
 ###
-http://localhost:8080/vacancies/find?profs=3002
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?profs=2
 ###
-http://localhost:8080/vacancies/find?names=1с&names=java&rows=3&page=2
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?empls=4
 ###
-http://localhost:8080/vacancies/find?langs=1
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?langs=2&langs=3
 ###
-http://localhost:8080/vacancies/find?page=4
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?ctgrs=2
+###
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?types=2
+###
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?page=4&sort=-2
 ################################################################################################################### SAVE
-POST http://localhost:8080/vacancies
+POST http://vacancies-jdbc-spring.herokuapp.com/vacancies
 Content-Type: application/json
 
 {
@@ -44,11 +48,11 @@ Content-Type: application/json
   "levels_languages_ids" : [[],[]]
 }
 ###
-POST http://localhost:8080/vacancies
+POST http://vacancies-jdbc-spring.herokuapp.com/vacancies
 Content-Type: application/json
 
 {
-  "id": 0,
+  "id": 21,
   "name": "Водитель экспедитор",
   "salaryMin": 70000,
   "salaryMax": 80000,
@@ -61,12 +65,12 @@ Content-Type: application/json
   "categories_ids" : [3, 5]
 }
 ###
-POST http://localhost:8080/vacancies
+POST http://vacancies-jdbc-spring.herokuapp.com/vacancies
 Content-Type: application/json
 
 {
   "id": 0,
-  "name": "Репетитор по англискому и немецкому языкам",
+  "name": "Репетитор по английскому и немецкому языкам",
   "salaryMin": 1200,
   "salaryMax": 1200,
   "rate_id" : 3,
@@ -78,5 +82,5 @@ Content-Type: application/json
 }
 
 ################################################################################################################# REMOVE
-DELETE http://localhost:8080/vacancies/18/remove
+DELETE http://vacancies-jdbc-spring.herokuapp.com/vacancies/21/remove
 ########################################################################################################################
