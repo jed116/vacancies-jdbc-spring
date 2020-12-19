@@ -1,15 +1,17 @@
 ################################################################################################################## G E T
 GET http://localhost:8080/vacancies
 ###
-GET http://localhost:8080/vacancies/20
+GET http://localhost:8080/vacancies/21
 ###
-GET http://localhost:8080/vacancies/ids?id=3&id=1&id=22&id=5
+GET http://localhost:8080/vacancies/ids?id=3&id=1&id=22&id=21
 ################################################################################################################### FIND
 http://localhost:8080/vacancies/find?sal=100000&sort=2
 ###
 http://localhost:8080/vacancies/find?date=2020-10-01
 ###
 http://localhost:8080/vacancies/find?names=MANGO OFFICE&names=Автошкола СВЕТОФОР
+###
+http://localhost:8080/vacancies/find?names=авто
 ###
 http://localhost:8080/vacancies/find?comps=6&comps=4
 ###
@@ -26,6 +28,8 @@ http://localhost:8080/vacancies/find?langs=2&langs=3
 http://localhost:8080/vacancies/find?ctgrs=2
 ###
 http://localhost:8080/vacancies/find?types=2
+###
+http://localhost:8080/vacancies/find?car=0
 ###
 http://localhost:8080/vacancies/find?page=4&sort=-2
 ################################################################################################################### SAVE
@@ -62,15 +66,17 @@ Content-Type: application/json
   "types_ids" : [1],
   "professions_ids" : [3001, 3002],
   "employments_ids" : [1],
-  "categories_ids" : [3, 5]
+  "categories_ids" : [3, 5],
+  "car" : 1
 }
 ###
 POST http://localhost:8080/vacancies
 Content-Type: application/json
 
 {
-  "id": 0,
+  "id": 21,
   "name": "Репетитор по английскому и немецкому языкам",
+  "description": "Требуется репетитор нескольких иностранных языков на почасовую ставку.",
   "salaryMin": 1200,
   "salaryMax": 1200,
   "rate_id" : 3,

@@ -10,7 +10,9 @@ import java.sql.Date;
 public class VacancyPostRequestBody {
     private int id;
     private String name;
+    private String description;
     private Date date;
+    private int car;
     private int salaryMin;
     private int salaryMax;
     private int rate_id;

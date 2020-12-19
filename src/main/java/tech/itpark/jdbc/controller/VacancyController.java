@@ -52,7 +52,8 @@ public class VacancyController {
                                       @RequestParam Optional<List<Integer>> langs,
                                       @RequestParam Optional<List<Integer>> ctgrs,
                                       @RequestParam Optional<List<Integer>> types,
-                                      @RequestParam Optional<Integer> lglvl) {
+                                      @RequestParam Optional<Integer> lglvl,
+                                      @RequestParam Optional<Integer> car) {
         Map<String, Object> findMap = new HashMap<>();
 
         if (!names.isEmpty()) {
@@ -91,6 +92,9 @@ public class VacancyController {
         }
         if (!types.isEmpty()) {
             findMap.put("types", types.get());
+        }
+        if (!car.isEmpty()){
+            findMap.put("car", car.get());
         }
 
         return vacancyManager.find( !page.isEmpty() ? page.get() : 1,

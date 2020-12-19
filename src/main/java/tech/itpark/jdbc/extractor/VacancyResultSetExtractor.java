@@ -29,16 +29,19 @@ public class VacancyResultSetExtractor implements ResultSetExtractor<Map<Integer
             if (resultSet.getInt("company_id") != 0){
                 company = new Company(resultSet.getInt("company_id"), resultSet.getString("company_name"));
             }
+            int car = resultSet.getInt("car");
 
             Vacancy vacancy = new Vacancy(
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
+                    resultSet.getString("description"),
                     resultSet.getDate("date"),
                     resultSet.getInt("salaryMin"),
                     resultSet.getInt("salaryMax"),
                     rate,
                     location,
-                    company);
+                    company,
+                    car);
 
             mapResult.put(vacancy.getId(), vacancy);
         }

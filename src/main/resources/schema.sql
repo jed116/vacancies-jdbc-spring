@@ -62,12 +62,14 @@ CREATE TABLE vacancies
 (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name TEXT NOT NULL,
+    description TEXT NOT NULL,
     date DATE NOT NULL,
     salaryMin INTEGER,
     salaryMax INTEGER,
     rate_id INTEGER REFERENCES rates_list,
     location_id INTEGER REFERENCES locations_list,
-    company_id INTEGER REFERENCES companies_list
+    company_id INTEGER REFERENCES companies_list,
+    car INTEGER DEFAULT 0
 );
 
 ---------------------------------------------------------------------

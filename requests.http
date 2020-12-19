@@ -27,6 +27,8 @@ http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?ctgrs=2
 ###
 http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?types=2
 ###
+http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?car=1
+###
 http://vacancies-jdbc-spring.herokuapp.com/vacancies/find?page=4&sort=-2
 ################################################################################################################### SAVE
 POST http://vacancies-jdbc-spring.herokuapp.com/vacancies
@@ -62,7 +64,8 @@ Content-Type: application/json
   "types_ids" : [1],
   "professions_ids" : [3001, 3002],
   "employments_ids" : [1],
-  "categories_ids" : [3, 5]
+  "categories_ids" : [3, 5],
+  "car" : 1
 }
 ###
 POST http://vacancies-jdbc-spring.herokuapp.com/vacancies

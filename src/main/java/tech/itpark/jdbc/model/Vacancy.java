@@ -1,16 +1,11 @@
 package tech.itpark.jdbc.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
 import java.util.List;
 
-//@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class Vacancy {
     private int id;
@@ -21,8 +16,8 @@ public class Vacancy {
     private Rate rate;
     private Location location;
     private Company company;
-//  private String description;
-//  private int car;
+    private String description;
+    private int car;
     private List<Type> types = new ArrayList<>();
     private List<Profession> professions = new ArrayList<>();
     private List<Employment> employments = new ArrayList<>();
@@ -31,20 +26,25 @@ public class Vacancy {
 
     public Vacancy(final int id,
                    final String name,
+                   final String description,
                    final Date date,
                    final int salaryMin,
                    final int salaryMax,
                    final Rate rate,
                    final Location location,
-                   final Company company) {
+                   final Company company,
+                   final int car
+                   ) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.date = date;
         this.salaryMin = salaryMin;
         this.salaryMax = salaryMax;
         this.rate = rate;
         this.location = location;
         this.company = company;
+        this.car = car;
     }
 
 }

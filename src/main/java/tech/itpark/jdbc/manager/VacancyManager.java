@@ -48,7 +48,7 @@ public class VacancyManager {
         List<Vacancy> result = new ArrayList<>();
 
         Map<Integer, Vacancy> vacanciesMap = template.query(
-                "SELECT DISTINCT v.id id, v.name name, v.date date, v.salaryMin, v.salaryMax, " +
+        "SELECT DISTINCT v.id id, v.name name, v.description description,v.date date, v.salaryMin, v.salaryMax, v.car car, " +
             "r.id rate_id, r.name rate_name, l.id location_id, l.name location_name, c.id company_id, c.name company_name " +
                         "FROM vacancies v " +
                         "LEFT JOIN rates_list r     ON v.rate_id = r.id " +
@@ -145,11 +145,14 @@ public class VacancyManager {
     public Vacancy save(VacancyPostRequestBody vacancyPostRequestBody){
         int company_id = vacancyPostRequestBody.getCompany_id();
 
+        String description = vacancyPostRequestBody.getDescription();
         String company_update_param = company_id !=0 ? " :company_id" : " null";
         Map<String, ?> vacancyParams = Map.of(
                 "id", vacancyPostRequestBody.getId(),
                 "name", vacancyPostRequestBody.getName(),
+                "description",  description != null ? description : "<Добавьте описание вакансии>",
                 "date", new Date(System.currentTimeMillis()), //vacancyPostRequestBody.getDate(),
+                "car", vacancyPostRequestBody.getCar(),
                 "salaryMin", vacancyPostRequestBody.getSalaryMin(),
                 "salaryMax", vacancyPostRequestBody.getSalaryMax(),
                 "rate_id",  vacancyPostRequestBody.getRate_id(),
@@ -158,8 +161,8 @@ public class VacancyManager {
 
         if (vacancyPostRequestBody.getId() == 0){
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            template.update("INSERT INTO vacancies(name, date, salaryMin, salaryMax, rate_id, location_id, company_id) " +
-               "VALUES (:name, :date, :salaryMin, :salaryMax, :rate_id, :location_id, "+ company_update_param +" )",
+            template.update("INSERT INTO vacancies(name, description, date, car, salaryMin, salaryMax, rate_id, location_id, company_id) " +
+               "VALUES (:name, :description, :date, :car, :salaryMin, :salaryMax, :rate_id, :location_id, "+ company_update_param +" )",
                     new MapSqlParameterSource(vacancyParams), keyHolder);
             int vacancy_id = Objects.requireNonNull(keyHolder.getKey()).intValue();
             if (vacancy_id == 0){
@@ -168,7 +171,7 @@ public class VacancyManager {
             vacancyPostRequestBody.setId(vacancy_id);
         }
         else {
-            template.update("UPDATE vacancies SET name = :name, date = :date, salaryMin = :salaryMin, salaryMax = :salaryMax, " +
+            template.update("UPDATE vacancies SET name = :name, description = :description, date = :date, car = :car, salaryMin = :salaryMin, salaryMax = :salaryMax, " +
                 "rate_id = :rate_id, location_id = :location_id, company_id = " + company_update_param + " WHERE id = :id", vacancyParams);
         }
 
@@ -317,10 +320,13 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
     }
     String namesConditionExpression = " FALSE ";
     if (regexpNames.length() > 0) {
-        namesConditionExpression = " LOWER(v.name) REGEXP '"+regexpNames+"' OR LOWER(c.name) REGEXP '"+regexpNames+"' ";
+        namesConditionExpression =" LOWER(v.name) REGEXP '"+regexpNames+
+                                "' OR LOWER(c.name) REGEXP '"+regexpNames+
+                                "' OR LOWER(v.description) REGEXP '"+regexpNames+"' ";
     }
 
     Date date = (Date) findMap.get("date");
+    Integer car = (Integer) findMap.get("car");
     Integer salary = (Integer) findMap.get("salary");
     Integer language_level = (Integer) findMap.get("language_level");
 
@@ -348,6 +354,8 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
         new AbstractMap.SimpleEntry<String, List<Integer>>("categories_ids", categories_ids != null ? categories_ids : empty_ids),
         new AbstractMap.SimpleEntry<String, List<Integer>>("languages_ids", languages_ids != null ? languages_ids : empty_ids),
         new AbstractMap.SimpleEntry<String, Integer>("language_level", language_level != null ? language_level : MAX_LANGUAGE_LEVEL),
+        new AbstractMap.SimpleEntry<String, Integer>("car", car != null ? (car > 0 ? 1 : 0)  : 0),
+        new AbstractMap.SimpleEntry<String, Boolean>("disable_car_filter", car == null),
         new AbstractMap.SimpleEntry<String, Boolean>("disable_types_filter", types_ids == null),
         new AbstractMap.SimpleEntry<String, Boolean>("disable_rates_filter", rates_ids == null),
         new AbstractMap.SimpleEntry<String, Boolean>("disable_companies_filter", companies_ids == null),
@@ -371,7 +379,7 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
     }
 
     List<Integer> result = template.query("WITH " +
-        "cte_all AS (SELECT DISTINCT v.id id, v.date date, " +
+        "cte_all AS (SELECT DISTINCT v.id id, v.date date, v.car car, " +
                     "CASE " +
                     "   WHEN v.salaryMax > 0 AND v.salaryMin > 0 THEN (v.salaryMax + v.salaryMin)/2 " +
                     "   WHEN v.salaryMax > 0 AND v.salaryMin = 0 THEN v.salaryMax " +
@@ -390,6 +398,7 @@ private List<Integer> getFoundIds(int page, int rows, int sort, Map <String, ?> 
                     "WHERE " +
                     "( " + namesConditionExpression + " OR :disable_names_filter) " +
                     " AND ( :date <= v.date) AND ( :salary <= v.salaryMin OR :salary <= v.salaryMax )" +
+                    " AND (:car = v.car OR :disable_car_filter) " +
                     " AND (c.id IN (:companies_ids) OR :disable_companies_filter) " +
                     " AND (l.id IN (:locations_ids) OR :disable_locations_filter ) " +
                     " AND (r.id IN (:rates_ids )    OR :disable_rates_filter) " +
